@@ -1,5 +1,7 @@
 package pl.coderslab;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,7 +21,11 @@ public class Main {
             switch (choice) {
                 case "add":
                     tasks = add(tasks);
-
+                case "list":
+                    list(tasks);
+                    break;
+                case "remove":
+                    remove(tasks);
                     break;
                 case "exit":
                     exit();
@@ -29,19 +35,25 @@ public class Main {
 
             }
         }
-    //                case "remove":
-    //                    remove();
-    //                    break;
-    //                case "list":
-    //                    list();
-    //                    break;
-    //                case "exit":
-    //                    exit();
-    //                    break;
+    }
 
+    public static void list(String[][] tasks) {
+       // zrobic ładne wyswietlanie
+        StringBuilder sb = new StringBuilder();
+
+       for (int i = 0; i < tasks.length; i++) {
+            System.out.print( i + " | " );
+            for (int j = 0; j < tasks[i].length; j++) {
+                System.out.print(tasks[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 
     public static String[][] tasks() {
+        /*
+        // Ładujemy liste tasków z pliku
+        */
         // liczymy ilosc linii w pliku;
         long count = 0;
         Path path = Paths.get("tasks.csv");
@@ -76,11 +88,11 @@ public class Main {
         StringBuilder sb = new StringBuilder();
         boolean r = true;
         while (r) {
-            System.out.println("Please add task description");
+            System.out.println(ConsoleColors.BLUE + "\nPlease add task description below:" + ConsoleColors.RESET);
             sb.append(sc.nextLine()).append(", ");
-            System.out.println("Please add task due date (rrrr-mm-dd)");
+            System.out.println(ConsoleColors.BLUE + "\nPlease add task due date (rrrr-mm-dd)" + ConsoleColors.RESET);
             sb.append(sc.nextLine()).append(", ");
-            System.out.println("Is your task is important: true/false");
+            System.out.println(ConsoleColors.BLUE + "\nIs your task is important: "  + ConsoleColors.YELLOW + "true/false"  + ConsoleColors.RESET);
             sb.append(sc.nextLine());
             System.out.print("----------------------------------------\n" + ConsoleColors.RED + "Is that ok? (y/n):\n" + ConsoleColors.GREEN + sb + ConsoleColors.RESET + "\n\n->");
                 if (sc.nextLine().equals("y")){
@@ -104,17 +116,82 @@ public class Main {
         return tasks;
     }
 
+    public static String[][] remove(String[][] tasks) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("-------------------------------");
+        System.out.println("| " + ConsoleColors.RED + "REMOVING TASK FROM THE LIST" + ConsoleColors.RESET + " |");
+        System.out.println("-------------------------------");
+        System.out.println(ConsoleColors.BLUE + "Please select number to remove:" + ConsoleColors.RESET);
+
+        // trzeba sprawdzic czy jest cyfra i czy nie jest mniejsza od zera i czy nie jest wieksza od indexu
+        boolean loop = true;
+        while (loop) {
+            String rm = sc.nextLine();
+            if (Integer.parseInt(rm)) {
+
+            }
+
+            // czy mamy integer
+            while (!sc.hasNextInt()) {
+                sc.nextLine();
+                System.out.println(ConsoleColors.RED + "\nIncorrect argument passed. Please give number greater or equal 0" + ConsoleColors.RESET);
+            }
+            // czy jest mniejszy od zera i czy nie przekraczamy indexu
+            // nie ma tu sensu łapać wyjątku dopiero przy próbie zapisu
+            int rm = sc.nextInt();
+            if ((rm < tasks.length) && (rm >= 0)) {
+                //confirm
+                System.out.println("Are you sure that you want to remove this task? [y/n]");
+                for (int i = 0; i < 3; i++) {
+                    System.out.print(tasks[rm][i]);
+                }
+                ;
+                System.out.println();
+                sc = new Scanner(System.in);
+                if (sc.nextLine().equals("y")) {
+                    try {
+                        ArrayUtils.remove(tasks, rm);
+                        System.out.println(ConsoleColors.RED + "Task removed." + ConsoleColors.RESET);
+                        loop = false;
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println(ConsoleColors.RED + "Index Out Of Bound Exception\nPlease give number of existing task.\n" + ConsoleColors.RESET);
+                        loop = true;
+                    }
+                } else {
+                    System.out.println("As you wish, I will not remove it.");
+                }
+
+            } else {
+
+                System.out.println(ConsoleColors.RED + "\nIncorrect argument passed. Please give number greater or equal 0" + ConsoleColors.RESET);
+
+            }
+        }
+
+        // zapis do pliku aby nie stracić zmian
+        //        System.out.println("Do you want save all changes to the file? [y/n] ");
+        //        if (sc.nextLine().equals("y")) {
+        //            System.out.println("Saving.");
+        //       }
+
+        return tasks();
+    }
+
     public static int exit() {
         System.exit(0);
         return 1;
     }
 
     public static String menu() {
-        System.out.println(ConsoleColors.BLUE + "Please select an option:" + ConsoleColors.RESET);
+        System.out.printf("----------------------------\n");
+        System.out.println("|" + ConsoleColors.BLUE + " Please select an option " + ConsoleColors.RESET + " | ");
+        System.out.printf("----------------------------\n");
         String[] menu = {"add", "remove", "list", "exit"};
         for (String s : menu) {
-            System.out.println(s);
+            System.out.printf("| %-24s |%n",s);
         }
+        System.out.printf("----------------------------\n");
         Scanner sc = new Scanner(System.in);
         return sc.nextLine();
     }
