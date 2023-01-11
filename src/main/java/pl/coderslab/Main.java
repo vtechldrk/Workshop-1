@@ -1,10 +1,9 @@
 package pl.coderslab;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,6 +20,7 @@ public class Main {
             switch (choice) {
                 case "add":
                     tasks = add(tasks);
+                    break;
                 case "list":
                     list(tasks);
                     break;
@@ -28,7 +28,7 @@ public class Main {
                     tasks = remove(tasks);
                     break;
                 case "exit":
-                    exit();
+                    exit(tasks);
                     break;
                 default:
                     //System.out.println(ConsoleColors.BLUE + "Please select an option:" + ConsoleColors.RESET);
@@ -101,9 +101,8 @@ public class Main {
             }
             sb.append(c1);
 
-            System.out.print("----------------------------------------\n" + ConsoleColors.RED + "Is that ok? :\n" + ConsoleColors.GREEN + sb + ConsoleColors.RESET + "\n[y/n] -> ");
+            System.out.print("----------------------------------------\n" + ConsoleColors.RED + "Is that ok? :\n" + ConsoleColors.GREEN + sb + ConsoleColors.RESET + "\n[y/n] ->");
                 if (sc.nextLine().equals("y")){
-
                     tasks =  Arrays.copyOf(tasks, tasks.length + 1);
                     tasks[tasks.length-1] = sb.toString().split(",");
 
@@ -126,8 +125,11 @@ public class Main {
         boolean loop = true;
         while (loop) {
             System.out.println(ConsoleColors.BLUE + "Please select number to remove:" + ConsoleColors.RESET);
+            //przeczytalem o tej metodzie na końcu więc już nie mieszam bo działa...
+            //NumberUtils.isParsable(rm;
             try {
                 int rm = Integer.parseInt(sc.next());
+
                 if ((rm < tasks.length) && (rm >= 0)) {
                     //confirm
                     System.out.println("Are you sure that you want to remove this task? [y/n]");
@@ -182,9 +184,32 @@ public class Main {
         return tasks;
     }
 
-    public static int exit() {
+    public static void exit(String[][] tasks) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println(ConsoleColors.YELLOW + "Save tasks to file?" + ConsoleColors.RESET);
+
+        String answer = "";
+        while (!answer.equals("y") && !answer.equals("n") ) {
+            System.out.print("[y/n]-> ");
+            answer = sc.nextLine();
+        }
+        if (answer.equals("y")) {
+            try (PrintWriter printWriter = new PrintWriter("tasks.csv")) {
+                for (int i = 0; i < tasks.length; i++) {
+                        System.out.println(Arrays.toString(tasks[i]));
+                        printWriter.println(Arrays.toString(tasks[i]));
+                }
+
+            } catch (FileNotFoundException ex) {
+                System.out.println("File Not Found Exception.");
+            }
+        } else {
+            System.out.println("Exit without saving.");
+            System.out.println(ConsoleColors.RED + "Bye, bye..." + ConsoleColors.RESET);
+        }
+
         System.exit(0);
-        return 1;
+
     }
 
     public static String menu() {
