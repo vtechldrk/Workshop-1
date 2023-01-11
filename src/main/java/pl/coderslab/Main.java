@@ -1,7 +1,7 @@
 package pl.coderslab;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.math.NumberUtils;
+//import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -18,27 +18,20 @@ public class Main {
         while (true) {
             String choice = menu();
             switch (choice) {
-                case "add":
-                    tasks = add(tasks);
-                    break;
-                case "list":
-                    list(tasks);
-                    break;
-                case "remove":
-                    tasks = remove(tasks);
-                    break;
-                case "exit":
-                    exit(tasks);
-                    break;
-                default:
-                    //System.out.println(ConsoleColors.BLUE + "Please select an option:" + ConsoleColors.RESET);
+                case "add" -> tasks = add(tasks);
+                case "list" -> list(tasks);
+                case "remove" -> tasks = remove(tasks);
+                case "exit" -> exit(tasks);
+                default -> {
+                }
+                //System.out.println(ConsoleColors.BLUE + "Please select an option:" + ConsoleColors.RESET);
             }
         }
     }
 
     public static void list(String[][] tasks) {
        // zrobic ładne wyswietlanie
-        StringBuilder sb = new StringBuilder();
+       // StringBuilder sb = new StringBuilder();
 
        for (int i = 0; i < tasks.length; i++) {
             System.out.print( i + " | " );
@@ -50,32 +43,65 @@ public class Main {
     }
 
     public static String[][] tasks() {
+        String[][] tasks = {{null,null,null}};
         /*
         // Ładujemy liste tasków z pliku
         */
         // liczymy ilosc linii w pliku;
-        long count = 0;
+        long count;
         Path path = Paths.get("tasks.csv");
+        boolean isExist = true;
         try {
             count = Files.lines(path).count();
         } catch ( IOException e) {
-            e.printStackTrace();
+            isExist = false;
+            count = 1;
         }
+
         int row = (int)count; //konwersja long na int
 
-        // tworzymy odpowiednią tablice z 3 kolumnami
-        String[][] tasks = new String[row][3];
+        // if dile not exists we will try to create it.
+        if (!isExist) {
 
-        //ładujemy plik - jak go nie ma to tworzymy z przykladowym wierszem / sprawdzic if exist
-        row = 0;
-        File file = new File("tasks.csv");
-        try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNextLine()) {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("There is no task.csv file. First run?");
+            System.out.println("Do you want to create one with example values?");
+            String answer = "";
+            while (!answer.equals("y") && !answer.equals("n")) {
+                System.out.print("[y/n]-> ");
+                answer = sc.nextLine();
+            }
+            if (answer.equals("y")) {
+                try (PrintWriter printWriter = new PrintWriter("tasks.csv")) {
+                    printWriter.println("""
+                            Simple task - very important, 2020-03-09, true
+                            Second task not so important, 2020-05-10, false
+                            Throw away trash, 2020-03-09, false""");
+                    isExist=true;
+                    row = 3; // to create proper array[3][3] 3 rows and 3 cols
+                } catch (IOException ex) {
+                    System.out.println("Cannot create a file. Permission problem? Full space?");
+                  //  isExist=false;
+                }
+            }
+        }
+        if (isExist) {
+            tasks = new String[row][3]; // creating array based on row calc above
+            //trying to load a file. Even it wasn't exist should be there now.
+            row = 0;
+            File file = new File("tasks.csv");
+            try (Scanner scanner = new Scanner(file)) {
+                while (scanner.hasNextLine()) {
                     tasks[row] = scanner.nextLine().split(",");
                     row++;
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println("File Not Found");
+                System.out.println("Starting with empty list");
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("Błąd odczytu pliku: " + e);
+        } else {
+            //tasks = new String[1][3];
+            Arrays.fill(tasks, null);
         }
         return tasks;
     }
@@ -107,9 +133,10 @@ public class Main {
                     tasks[tasks.length-1] = sb.toString().split(",");
 
                     // a moze zapisac od razu do pliku ?
-                    r=false; //bo krzyczy kompilator
+                    r = false;
                     return tasks;
                 }
+
         }
         return tasks;
     }
@@ -150,7 +177,7 @@ public class Main {
                             loop = false;
                         } catch (IndexOutOfBoundsException e) {
                             System.out.println(ConsoleColors.RED + "Index Out Of Bound Exception\nPlease give number of existing task.\n" + ConsoleColors.RESET);
-                            loop = true;
+                           // loop = true;
                         }
                     } else {
                         System.out.println("As you wish, I will not remove it.");
@@ -160,27 +187,20 @@ public class Main {
                 } else {
                     if (rm > tasks.length) {
                         System.out.println(ConsoleColors.RED + "Index Out Of Bound Exception\nPlease give number of existing task.\n" + ConsoleColors.RESET);
-                        loop = true;
+                        //loop = true;
                     } else {
                         System.out.println(ConsoleColors.RED + "\nIncorrect argument passed. Please give number greater or equal 0" + ConsoleColors.RESET);
-                        loop = true;
+                        //loop = true;
                     }
                 }
 
             } catch  (NumberFormatException e) {
                 System.out.println(ConsoleColors.RED + "\nIncorrect argument passed. Please give number greater or equal 0" + ConsoleColors.RESET);
                 //System.out.println(e);
-                loop = true;
+                //loop = true;
             }
 
         }
-
-        // zapis do pliku aby nie stracić zmian
-        //        System.out.println("Do you want save all changes to the file? [y/n] ");
-        //        if (sc.nextLine().equals("y")) {
-        //            System.out.println("Saving.");
-        //       }
-
         return tasks;
     }
 
@@ -190,14 +210,14 @@ public class Main {
 
         String answer = "";
         while (!answer.equals("y") && !answer.equals("n") ) {
-            System.out.print("[y/n]-> ");
+            System.out.print("[y/n] -> ");
             answer = sc.nextLine();
         }
         if (answer.equals("y")) {
             try (PrintWriter printWriter = new PrintWriter("tasks.csv")) {
-                for (int i = 0; i < tasks.length; i++) {
-                        System.out.println(Arrays.toString(tasks[i]));
-                        printWriter.println(Arrays.toString(tasks[i]));
+                for (String[] task : tasks) {
+                    System.out.println(Arrays.toString(task));
+                    printWriter.println(Arrays.toString(task));
                 }
 
             } catch (FileNotFoundException ex) {
@@ -213,14 +233,14 @@ public class Main {
     }
 
     public static String menu() {
-        System.out.printf("----------------------------\n");
+        System.out.print("----------------------------\n");
         System.out.println("|" + ConsoleColors.BLUE + " Please select an option " + ConsoleColors.RESET + " | ");
-        System.out.printf("----------------------------\n");
+        System.out.print("----------------------------\n");
         String[] menu = {"add", "remove", "list", "exit"};
         for (String s : menu) {
             System.out.printf("| %-24s |%n",s);
         }
-        System.out.printf("----------------------------\n");
+        System.out.print("----------------------------\n");
         Scanner sc = new Scanner(System.in);
         return sc.nextLine();
     }
