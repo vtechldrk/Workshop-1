@@ -25,14 +25,13 @@ public class Main {
                     list(tasks);
                     break;
                 case "remove":
-                    remove(tasks);
+                    tasks = remove(tasks);
                     break;
                 case "exit":
                     exit();
                     break;
                 default:
-                    System.out.println(ConsoleColors.BLUE + "Please select an option:" + ConsoleColors.RESET);
-
+                    //System.out.println(ConsoleColors.BLUE + "Please select an option:" + ConsoleColors.RESET);
             }
         }
     }
@@ -77,9 +76,7 @@ public class Main {
             }
         } catch (FileNotFoundException e) {
             System.out.println("Błąd odczytu pliku: " + e);
-
         }
-
         return tasks;
     }
 
@@ -89,30 +86,32 @@ public class Main {
         boolean r = true;
         while (r) {
             System.out.println(ConsoleColors.BLUE + "\nPlease add task description below:" + ConsoleColors.RESET);
+            System.out.print(" ->");
             sb.append(sc.nextLine()).append(", ");
             System.out.println(ConsoleColors.BLUE + "\nPlease add task due date (rrrr-mm-dd)" + ConsoleColors.RESET);
+            System.out.print(" ->");
             sb.append(sc.nextLine()).append(", ");
             System.out.println(ConsoleColors.BLUE + "\nIs your task is important: "  + ConsoleColors.YELLOW + "true/false"  + ConsoleColors.RESET);
-            sb.append(sc.nextLine());
-            System.out.print("----------------------------------------\n" + ConsoleColors.RED + "Is that ok? (y/n):\n" + ConsoleColors.GREEN + sb + ConsoleColors.RESET + "\n\n->");
+            System.out.print(" ->");
+            String c1 = sc.nextLine();
+            while ( !c1.equals("true") && !c1.equals("false") ){
+                System.out.println(ConsoleColors.BLUE + "\nIs your task is important: "  + ConsoleColors.YELLOW + "true/false"  + ConsoleColors.RESET);
+                System.out.print(" ->");
+                c1 = sc.nextLine();
+            }
+            sb.append(c1);
+
+            System.out.print("----------------------------------------\n" + ConsoleColors.RED + "Is that ok? :\n" + ConsoleColors.GREEN + sb + ConsoleColors.RESET + "\n[y/n] -> ");
                 if (sc.nextLine().equals("y")){
 
-                    String[][] tmp = Arrays.copyOf(tasks, tasks.length + 1);
-                    tmp[tmp.length-1] = sb.toString().split(",");
-                    // a moze zapisac od razu do pliku ?
-                    tasks = Arrays.copyOf(tmp,tmp.length);
+                    tasks =  Arrays.copyOf(tasks, tasks.length + 1);
+                    tasks[tasks.length-1] = sb.toString().split(",");
 
-                    for (String[] task : tasks) {
-                        for (int j = 0; j < task.length; j++) {
-                            System.out.print(task[j]);
-                        }
-                        System.out.println();
-                    }
+                    // a moze zapisac od razu do pliku ?
                     r=false; //bo krzyczy kompilator
                     return tasks;
                 }
         }
-
         return tasks;
     }
 
@@ -122,51 +121,56 @@ public class Main {
         System.out.println("-------------------------------");
         System.out.println("| " + ConsoleColors.RED + "REMOVING TASK FROM THE LIST" + ConsoleColors.RESET + " |");
         System.out.println("-------------------------------");
-        System.out.println(ConsoleColors.BLUE + "Please select number to remove:" + ConsoleColors.RESET);
 
         // trzeba sprawdzic czy jest cyfra i czy nie jest mniejsza od zera i czy nie jest wieksza od indexu
         boolean loop = true;
         while (loop) {
-            String rm = sc.nextLine();
-            if (Integer.parseInt(rm)) {
+            System.out.println(ConsoleColors.BLUE + "Please select number to remove:" + ConsoleColors.RESET);
+            try {
+                int rm = Integer.parseInt(sc.next());
+                if ((rm < tasks.length) && (rm >= 0)) {
+                    //confirm
+                    System.out.println("Are you sure that you want to remove this task? [y/n]");
+                    for (int i = 0; i < 3; i++) {
+                        System.out.print(tasks[rm][i]);
+                    }
 
-            }
+                    System.out.println();
+                    sc = new Scanner(System.in);
+                    if (sc.nextLine().equals("y")) {
+                       // ten try jest tu nie potrzebny ale dodałem bo w zadaniu było aby był ;)
+                       // natomiast wyjatek ten tutaj teoretyczni enigdy nie wystąpi
 
-            // czy mamy integer
-            while (!sc.hasNextInt()) {
-                sc.nextLine();
-                System.out.println(ConsoleColors.RED + "\nIncorrect argument passed. Please give number greater or equal 0" + ConsoleColors.RESET);
-            }
-            // czy jest mniejszy od zera i czy nie przekraczamy indexu
-            // nie ma tu sensu łapać wyjątku dopiero przy próbie zapisu
-            int rm = sc.nextInt();
-            if ((rm < tasks.length) && (rm >= 0)) {
-                //confirm
-                System.out.println("Are you sure that you want to remove this task? [y/n]");
-                for (int i = 0; i < 3; i++) {
-                    System.out.print(tasks[rm][i]);
-                }
-                ;
-                System.out.println();
-                sc = new Scanner(System.in);
-                if (sc.nextLine().equals("y")) {
-                    try {
-                        ArrayUtils.remove(tasks, rm);
-                        System.out.println(ConsoleColors.RED + "Task removed." + ConsoleColors.RESET);
+                        try {
+                            tasks = ArrayUtils.remove(tasks, rm);
+                            //tasks = ArrayUtils.clone(t1);
+                            System.out.println(ConsoleColors.RED + "Task removed." + ConsoleColors.RESET);
+                            loop = false;
+                        } catch (IndexOutOfBoundsException e) {
+                            System.out.println(ConsoleColors.RED + "Index Out Of Bound Exception\nPlease give number of existing task.\n" + ConsoleColors.RESET);
+                            loop = true;
+                        }
+                    } else {
+                        System.out.println("As you wish, I will not remove it.");
                         loop = false;
-                    } catch (IndexOutOfBoundsException e) {
+                    }
+
+                } else {
+                    if (rm > tasks.length) {
                         System.out.println(ConsoleColors.RED + "Index Out Of Bound Exception\nPlease give number of existing task.\n" + ConsoleColors.RESET);
                         loop = true;
+                    } else {
+                        System.out.println(ConsoleColors.RED + "\nIncorrect argument passed. Please give number greater or equal 0" + ConsoleColors.RESET);
+                        loop = true;
                     }
-                } else {
-                    System.out.println("As you wish, I will not remove it.");
                 }
 
-            } else {
-
+            } catch  (NumberFormatException e) {
                 System.out.println(ConsoleColors.RED + "\nIncorrect argument passed. Please give number greater or equal 0" + ConsoleColors.RESET);
-
+                //System.out.println(e);
+                loop = true;
             }
+
         }
 
         // zapis do pliku aby nie stracić zmian
@@ -175,7 +179,7 @@ public class Main {
         //            System.out.println("Saving.");
         //       }
 
-        return tasks();
+        return tasks;
     }
 
     public static int exit() {
