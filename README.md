@@ -11,6 +11,8 @@ More is comming...
 - [X] Add task
 - [X] Remove task
 - [ ] Edit single task
+- [ ] Add date validation
+- [ ] Save to file feature
 
 ## Install
 
