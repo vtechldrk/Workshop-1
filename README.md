@@ -17,7 +17,7 @@ More is comming...
 
 ## Install
 
-Just download it [**HERE**](https://github.com/vtechldrk/TaskWorkshop/), ~~create a folder~~ put it in **_any_ folder** and double click on it to run.
+Just download it [**HERE**](https://github.com/vtechldrk/Workshop-1/), ~~create a folder~~ put it in **_any_ folder** and double click on it to run.
 
 ### Requirments
 
