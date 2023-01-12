@@ -46,7 +46,7 @@ After provide the number, program will show you which data you want to remove an
 - [ ] Edit single task
 - [X] Add date validation
 - [X] Save to file feature
-- [/] Write docimentation here...
+- [ ] Write docimentation here...
 
 ## Install
 
