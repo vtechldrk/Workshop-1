@@ -1,6 +1,7 @@
 package pl.coderslab;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.validator.GenericValidator;
 //import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.*;
@@ -43,7 +44,7 @@ public class Main {
     }
 
     public static String[][] tasks() {
-        String[][] tasks = {{null,null,null}};
+        String[][] tasks = {{"1","1","1n"}};
         /*
         // Ładujemy liste tasków z pliku
         */
@@ -81,7 +82,7 @@ public class Main {
                     row = 3; // to create proper array[3][3] 3 rows and 3 cols
                 } catch (IOException ex) {
                     System.out.println("Cannot create a file. Permission problem? Full space?");
-                  //  isExist=false;
+                    isExist=false;
                 }
             }
         }
@@ -100,8 +101,8 @@ public class Main {
                 System.out.println("Starting with empty list");
             }
         } else {
-            //tasks = new String[1][3];
-            Arrays.fill(tasks, null);
+            tasks = new String[][]{{"null","null","null"}};
+            //Arrays.fill(tasks, 1);
         }
         return tasks;
     }
@@ -116,7 +117,13 @@ public class Main {
             sb.append(sc.nextLine()).append(", ");
             System.out.println(ConsoleColors.BLUE + "\nPlease add task due date (rrrr-mm-dd)" + ConsoleColors.RESET);
             System.out.print(" ->");
-            sb.append(sc.nextLine()).append(", ");
+            //Walidacja formatu daty
+            String data = sc.nextLine();
+            while (!GenericValidator.isDate(data, "yyyy-MM-dd", true)) {
+                System.out.println(ConsoleColors.BLUE + "\nPlease provide date in proper format" + ConsoleColors.RESET);
+                data = sc.nextLine();
+            }
+            sb.append(data).append(", ");
             System.out.println(ConsoleColors.BLUE + "\nIs your task is important: "  + ConsoleColors.YELLOW + "true/false"  + ConsoleColors.RESET);
             System.out.print(" ->");
             String c1 = sc.nextLine();
@@ -216,20 +223,21 @@ public class Main {
         if (answer.equals("y")) {
             try (PrintWriter printWriter = new PrintWriter("tasks.csv")) {
                 for (String[] task : tasks) {
-                    System.out.println(Arrays.toString(task));
+                    //System.out.println(Arrays.toString(task));
                     printWriter.println(Arrays.toString(task));
-                }
 
+                }
+                System.out.println(ConsoleColors.BLUE + "The data has been written to the file tasks.csv." + ConsoleColors.RESET);
             } catch (FileNotFoundException ex) {
                 System.out.println("File Not Found Exception.");
             }
         } else {
             System.out.println("Exit without saving.");
-            System.out.println(ConsoleColors.RED + "Bye, bye..." + ConsoleColors.RESET);
+
         }
 
         System.exit(0);
-
+        System.out.println(ConsoleColors.RED + "Bye, bye..." + ConsoleColors.RESET);
     }
 
     public static String menu() {
