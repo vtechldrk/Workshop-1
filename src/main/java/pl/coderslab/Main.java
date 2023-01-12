@@ -74,10 +74,7 @@ public class Main {
             }
             if (answer.equals("y")) {
                 try (PrintWriter printWriter = new PrintWriter("tasks.csv")) {
-                    printWriter.println("""
-                            Simple task - very important, 2020-03-09, true
-                            Second task not so important, 2020-05-10, false
-                            Throw away trash, 2020-03-09, false""");
+                    printWriter.print("Simple task - very important, 2020-03-09, true\nSecond task not so important, 2020-05-10, false\nThrow away trash, 2020-03-09, false");
                     isExist=true;
                     row = 3; // to create proper array[3][3] 3 rows and 3 cols
                 } catch (IOException ex) {
@@ -158,20 +155,27 @@ public class Main {
         // trzeba sprawdzic czy jest cyfra i czy nie jest mniejsza od zera i czy nie jest wieksza od indexu
         boolean loop = true;
         while (loop) {
+            if (tasks.length == 0 ) {
+                System.out.println("Nothing to remove. Task list is empty!");
+                break;
+            }
             System.out.println(ConsoleColors.BLUE + "Please select number to remove:" + ConsoleColors.RESET);
-            //przeczytalem o tej metodzie na końcu więc już nie mieszam bo działa...
-            //NumberUtils.isParsable(rm;
+            System.out.print(" ->");
+            //
+            //przeczytalem o tej metodzie NumberUtils.isParsable() na końcu więc już nie mieszam bo działa...
+            //
             try {
                 int rm = Integer.parseInt(sc.next());
 
                 if ((rm < tasks.length) && (rm >= 0)) {
                     //confirm
-                    System.out.println("Are you sure that you want to remove this task? [y/n]");
+                    System.out.println("Are you sure that you want to remove this task?");
                     for (int i = 0; i < 3; i++) {
                         System.out.print(tasks[rm][i]);
                     }
 
-                    System.out.println();
+                    System.out.print("\n[y/n]->");
+
                     sc = new Scanner(System.in);
                     if (sc.nextLine().equals("y")) {
                        // ten try jest tu nie potrzebny ale dodałem bo w zadaniu było aby był ;)
@@ -222,11 +226,15 @@ public class Main {
         }
         if (answer.equals("y")) {
             try (PrintWriter printWriter = new PrintWriter("tasks.csv")) {
-                for (String[] task : tasks) {
-                    //System.out.println(Arrays.toString(task));
-                    printWriter.println(Arrays.toString(task));
-
+                StringBuilder line = new StringBuilder();
+                for (int i = 0; i < tasks.length; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        line.append(tasks[i][j]);
+                        if ( j < 2 ) {line.append(",");}
+                    }
+                    if ( i < tasks.length - 1 ) {line.append("\n");}
                 }
+                printWriter.print(line);
                 System.out.println(ConsoleColors.BLUE + "The data has been written to the file tasks.csv." + ConsoleColors.RESET);
             } catch (FileNotFoundException ex) {
                 System.out.println("File Not Found Exception.");
