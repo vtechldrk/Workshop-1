@@ -1,11 +1,12 @@
 # TaskWorkshop
-Console program for managing tasks.
+A java console program for managing scheduled tasks.
+This very simple java program allow you to manage your tasks list. You can list, add or remove tasks.
 
 More is comming...
 
 ## Features
 
-This very simple java program allow you to manage your tasks list. You can list, add or remove tasks. All of the tasks are keep in the file called tasks.csv.
+All of the tasks are keep in the file called tasks.csv.
 After program starts it is checking is there a file called tasks.csv in the working directory, if it is not, than you will have to decide wheter you want to program create it for you with some example tasks or not. File format is csv [task description, due date, importancy].</br>
 After that program will start and show you menu:
 
