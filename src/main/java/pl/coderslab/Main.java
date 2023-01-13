@@ -18,11 +18,13 @@ public class Main {
 
         while (true) {
             String choice = menu();
-            switch (choice) {
+            switch (choice.toLowerCase()) {
                 case "add" -> tasks = add(tasks);
                 case "list" -> list(tasks);
                 case "remove" -> tasks = remove(tasks);
+                case "modify" -> tasks = modify(tasks);
                 case "exit" -> exit(tasks);
+
                 default -> {
                 }
                 //System.out.println(ConsoleColors.BLUE + "Please select an option:" + ConsoleColors.RESET);
@@ -30,17 +32,38 @@ public class Main {
         }
     }
 
+    public static String[][] modify(String[][] tasks){
+        // modyfikacja wybranego tasku
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Which task you want to edit?");
+        System.out.print("-->");
+
+
+
+        return tasks;
+    }
+
     public static void list(String[][] tasks) {
        // zrobic ładne wyswietlanie
-       // StringBuilder sb = new StringBuilder();
+       StringBuilder line = new StringBuilder();
+      //for (String s : menu) {
+        //            System.out.printf("| %-32s |%n",s);
+        //        }
 
-       for (int i = 0; i < tasks.length; i++) {
-            System.out.print( i + " | " );
-            for (int j = 0; j < tasks[i].length; j++) {
-                System.out.print(tasks[i][j] + " ");
-            }
-            System.out.println();
+        System.out.println(ConsoleColors.CYAN + "-----------------------------------------------------------------------------");
+        System.out.println("| id | Description                                | Due date   | Importance |");
+        System.out.println("-----------------------------------------------------------------------------" + ConsoleColors.RESET);
+
+        for (int i = 0; i < tasks.length; i++) {
+
+            String s0 = Integer.toString(i);
+            String s1 = tasks[i][0];
+            String s2 = tasks[i][1];
+            String s3 = tasks[i][2];
+            System.out.printf( ConsoleColors.CYAN + "|" + ConsoleColors.RESET + " %2s " + ConsoleColors.CYAN + "|" + ConsoleColors.RESET + " %-42s "
+                    + ConsoleColors.CYAN + "|" + ConsoleColors.RESET + "%11s " + ConsoleColors.CYAN + "|" + ConsoleColors.RESET + "%-11s " + ConsoleColors.CYAN + "|%n"+ConsoleColors.RESET, s0, s1, s2, s3);
         }
+        System.out.println(ConsoleColors.CYAN + "-----------------------------------------------------------------------------" + ConsoleColors.RESET);
     }
 
     public static String[][] tasks() {
@@ -109,9 +132,16 @@ public class Main {
         StringBuilder sb = new StringBuilder();
         boolean r = true;
         while (r) {
-            System.out.println(ConsoleColors.BLUE + "\nPlease add task description below:" + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.BLUE + "\nPlease add task description:" + ConsoleColors.RESET);
             System.out.print(" ->");
-            sb.append(sc.nextLine()).append(", ");
+            String desc = sc.nextLine();
+            while (desc.length()>42) {
+                System.out.println(ConsoleColors.BLUE + "\nPlease add task description\nmax 42 characters:" + ConsoleColors.RESET);
+                System.out.print(" ->");
+                desc = sc.nextLine();
+            }
+            sb.append(desc).append(", ");
+
             System.out.println(ConsoleColors.BLUE + "\nPlease add task due date (rrrr-mm-dd)" + ConsoleColors.RESET);
             System.out.print(" ->");
             //Walidacja formatu daty
@@ -131,13 +161,15 @@ public class Main {
             }
             sb.append(c1);
 
-            System.out.print("----------------------------------------\n" + ConsoleColors.RED + "Is that ok? :\n" + ConsoleColors.GREEN + sb + ConsoleColors.RESET + "\n[y/n] ->");
+            System.out.print("----------------------------------------\n" + ConsoleColors.BLUE + "New task is below, should I add it to the list?\n" + ConsoleColors.GREEN + sb + ConsoleColors.RESET + "\n[y/n] ->");
                 if (sc.nextLine().equals("y")){
                     tasks =  Arrays.copyOf(tasks, tasks.length + 1);
                     tasks[tasks.length-1] = sb.toString().split(",");
 
                     // a moze zapisac od razu do pliku ?
                     r = false;
+                    return tasks;
+                } else {
                     return tasks;
                 }
 
@@ -171,9 +203,8 @@ public class Main {
                     //confirm
                     System.out.println("Are you sure that you want to remove this task?");
                     for (int i = 0; i < 3; i++) {
-                        System.out.print(tasks[rm][i]);
+                        System.out.print(ConsoleColors.YELLOW + tasks[rm][i] + ConsoleColors.RESET);
                     }
-
                     System.out.print("\n[y/n]->");
 
                     sc = new Scanner(System.in);
@@ -252,7 +283,7 @@ public class Main {
         System.out.print("----------------------------\n");
         System.out.println("|" + ConsoleColors.BLUE + " Please select an option " + ConsoleColors.RESET + " | ");
         System.out.print("----------------------------\n");
-        String[] menu = {"add", "remove", "list", "exit"};
+        String[] menu = {"add", "remove", "list", "modify", "exit"};
         for (String s : menu) {
             System.out.printf("| %-24s |%n",s);
         }
