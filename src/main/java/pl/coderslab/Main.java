@@ -288,6 +288,7 @@ public class Main {
             System.out.printf("| %-24s |%n",s);
         }
         System.out.print("----------------------------\n");
+        System.out.print("-->");
         Scanner sc = new Scanner(System.in);
         return sc.nextLine();
     }
