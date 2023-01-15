@@ -1,9 +1,8 @@
 package pl.coderslab;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.commons.validator.GenericValidator;
 //import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.validator.GenericValidator;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -12,10 +11,14 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import static pl.coderslab.ConsoleColors.*;
+
 public class Main {
+   // private static String[][] tasks = new String[0][];
     public static void main(String[] args) {
-        // wczytanie pliku tasks.csv
+        /* wczytanie pliku tasks.csv */
         String[][] tasks = tasks();
+       // tasks();
 
         while (true) {
             String choice = menu();
@@ -28,102 +31,16 @@ public class Main {
 
                 default -> {
                 }
-                //System.out.println(ConsoleColors.BLUE + "Please select an option:" + ConsoleColors.RESET);
+
             }
         }
     }
 
-//    public static String[][] modify(String[][] tasks){
-//        // modyfikacja wybranego tasku
-//        Scanner sc = new Scanner(System.in);
-//        System.out.println("Which task you want to edit?");
-//        System.out.print("-->");
-//        String s1 = sc.nextLine();
-//
-//        if (tasks.length == 0 ) {
-//            System.out.println("Task list is empty!");
-//            return tasks;
-//        }
-//
-////        while (!NumberUtils.isParsable(s1)) {
-////            System.out.println("Which task you want to edit?");
-////            System.out.print("-->");
-////            s1 = sc.nextLine();
-////        }
-//
-//        // trzeba sprawdzic czy jest cyfra i czy nie jest mniejsza od zera i czy nie jest wieksza od indexu
-//        boolean loop = true;
-//        while (loop) {
-//
-//            System.out.println(ConsoleColors.BLUE + "Which task you want to edit?" + ConsoleColors.RESET);
-//            System.out.print(" ->");
-//
-//            if ( NumberUtils.isParsable(s1) ) {
-//                int m1 = Integer.parseInt(s1);
-//                    if ((m1 < tasks.length) && ( m1 >= 0)) {
-//                    //confirm
-//                    for (int i = 0; i < 3; i++) {
-//                        System.out.print(ConsoleColors.YELLOW + tasks[rm][i] + ConsoleColors.RESET);
-//                    }
-//                    System.out.println("Are you sure that you want to remove this task?");
-//                    System.out.print("\n[y/n]->");
-//
-//                    sc = new Scanner(System.in);
-//                    if (sc.nextLine().equals("y")) {
-//                        // ten try jest tu nie potrzebny ale dodałem bo w zadaniu było aby był ;)
-//                        // natomiast wyjatek ten tutaj teoretyczni enigdy nie wystąpi
-//
-//                        try {
-//                            tasks = ArrayUtils.remove(tasks, rm);
-//                            //tasks = ArrayUtils.clone(t1);
-//                            System.out.println(ConsoleColors.RED + "Task removed." + ConsoleColors.RESET);
-//                            loop = false;
-//                        } catch (IndexOutOfBoundsException e) {
-//                            System.out.println(ConsoleColors.RED + "Index Out Of Bound Exception\nPlease give number of existing task.\n" + ConsoleColors.RESET);
-//                            // loop = true;
-//                        }
-//                    } else {
-//                        System.out.println("As you wish, I will not remove it.");
-//                        loop = false;
-//                    }
-//
-//                } else {
-//                    if (rm > tasks.length) {
-//                        System.out.println(ConsoleColors.RED + "Index Out Of Bound Exception\nPlease give number of existing task.\n" + ConsoleColors.RESET);
-//                        //loop = true;
-//                    } else {
-//                        System.out.println(ConsoleColors.RED + "\nIncorrect argument passed. Please give number greater or equal 0" + ConsoleColors.RESET);
-//                        //loop = true;
-//                    }
-//                }
-//
-//            } catch  (NumberFormatException e) {
-//                System.out.println(ConsoleColors.RED + "\nIncorrect argument passed. Please give number greater or equal 0" + ConsoleColors.RESET);
-//                //System.out.println(e);
-//                //loop = true;
-//            }
-//
-//
-//
-//
-//
-//            if ( s1 > tasks.length )
-//        System.out.println("wybrano " + s1 );
-//
-//
-//        return tasks;
-//    }
-
     public static void list(String[][] tasks) {
-       // zrobic ładne wyswietlanie
-       StringBuilder line = new StringBuilder();
-      //for (String s : menu) {
-        //            System.out.printf("| %-32s |%n",s);
-        //        }
 
-        System.out.println(ConsoleColors.CYAN + "-----------------------------------------------------------------------------");
+        System.out.println(CYAN + "-----------------------------------------------------------------------------");
         System.out.println("| id | Description                                | Due date   | Importance |");
-        System.out.println("-----------------------------------------------------------------------------" + ConsoleColors.RESET);
+        System.out.println("-----------------------------------------------------------------------------" + RESET);
 
         for (int i = 0; i < tasks.length; i++) {
 
@@ -131,14 +48,15 @@ public class Main {
             String s1 = tasks[i][0];
             String s2 = tasks[i][1];
             String s3 = tasks[i][2];
-            System.out.printf( ConsoleColors.CYAN + "|" + ConsoleColors.RESET + " %2s " + ConsoleColors.CYAN + "|" + ConsoleColors.RESET + " %-42s "
-                    + ConsoleColors.CYAN + "|" + ConsoleColors.RESET + "%11s " + ConsoleColors.CYAN + "|" + ConsoleColors.RESET + "%-11s " + ConsoleColors.CYAN + "|%n"+ConsoleColors.RESET, s0, s1, s2, s3);
+            System.out.printf( CYAN + "|" + RESET + " %2s " + CYAN + "|" + RESET + " %-42s "
+                    + CYAN + "|" + RESET + "%11s " + CYAN + "|" + RESET + "%-11s " + CYAN + "|%n"+RESET, s0, s1, s2, s3);
         }
-        System.out.println(ConsoleColors.CYAN + "-----------------------------------------------------------------------------" + ConsoleColors.RESET);
+        System.out.println(CYAN + "-----------------------------------------------------------------------------" + RESET);
     }
 
     public static String[][] tasks() {
-        String[][] tasks = {{"1","1","1n"}};
+         String[][] tasks;
+        //   tasks = new String[1][];
         /*
         // Ładujemy liste tasków z pliku
         */
@@ -173,7 +91,7 @@ public class Main {
                     row = 3; // to create proper array[3][3] 3 rows and 3 cols
                 } catch (IOException ex) {
                     System.out.println("Cannot create a file. Permission problem? Full space?");
-                    isExist=false;
+                    //isExist=false;
                 }
             }
         }
@@ -201,59 +119,54 @@ public class Main {
     public static String[][] add(String[][] tasks) {
         Scanner sc = new Scanner(System.in);
         StringBuilder sb = new StringBuilder();
-        boolean r = true;
-        while (r) {
-            System.out.println(ConsoleColors.BLUE + "\nPlease add task description:" + ConsoleColors.RESET);
+
+            System.out.println(BLUE + "\nPlease add task description:" + RESET);
             System.out.print(" ->");
             String desc = sc.nextLine();
             while (desc.length()>42) {
-                System.out.println(ConsoleColors.BLUE + "\nPlease add task description\nmax 42 characters:" + ConsoleColors.RESET);
+                System.out.println(BLUE + "\nPlease add task description\nmax 42 characters:" + RESET);
                 System.out.print(" ->");
                 desc = sc.nextLine();
             }
             sb.append(desc).append(", ");
 
-            System.out.println(ConsoleColors.BLUE + "\nPlease add task due date (rrrr-mm-dd)" + ConsoleColors.RESET);
+            System.out.println(BLUE + "\nPlease add task due date (rrrr-mm-dd)" + RESET);
             System.out.print(" ->");
             //Walidacja formatu daty
             String data = sc.nextLine();
             while (!GenericValidator.isDate(data, "yyyy-MM-dd", true)) {
-                System.out.println(ConsoleColors.BLUE + "\nPlease provide date in proper format" + ConsoleColors.RESET);
+                System.out.println(BLUE + "\nPlease provide date in proper format" + RESET);
                 System.out.print(" ->");
                 data = sc.nextLine();
             }
             sb.append(data).append(", ");
-            System.out.println(ConsoleColors.BLUE + "\nIs your task is important: "  + ConsoleColors.YELLOW + "true/false"  + ConsoleColors.RESET);
+            System.out.println(BLUE + "\nIs your task is important: "  + YELLOW + "true/false"  + RESET);
             System.out.print(" ->");
             String c1 = sc.nextLine();
             while ( !c1.equals("true") && !c1.equals("false") ){
-                System.out.println(ConsoleColors.BLUE + "\nIs your task is important: "  + ConsoleColors.YELLOW + "true/false"  + ConsoleColors.RESET);
+                System.out.println(BLUE + "\nIs your task is important: "  + YELLOW + "true/false"  + RESET);
                 System.out.print(" ->");
                 c1 = sc.nextLine();
             }
             sb.append(c1);
 
-            System.out.print("----------------------------------------\n" + ConsoleColors.BLUE + "New task is below, should I add it to the list?\n" + ConsoleColors.GREEN + sb + ConsoleColors.RESET + "\n[y/n] ->");
+            System.out.print("----------------------------------------\n" + BLUE + "New task is below, should I add it to the list?\n" + GREEN + sb + RESET + "\n[y/n] ->");
                 if (sc.nextLine().equals("y")){
                     tasks =  Arrays.copyOf(tasks, tasks.length + 1);
                     tasks[tasks.length-1] = sb.toString().split(",");
-
                     // a moze zapisac od razu do pliku ?
-                    r = false;
                     return tasks;
                 } else {
                     return tasks;
                 }
 
-        }
-        return tasks;
     }
 
     public static String[][] remove(String[][] tasks) {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("-------------------------------");
-        System.out.println("| " + ConsoleColors.RED + "REMOVING TASK FROM THE LIST" + ConsoleColors.RESET + " |");
+        System.out.println("| " + RED + "REMOVING TASK FROM THE LIST" + RESET + " |");
         System.out.println("-------------------------------");
 
         // trzeba sprawdzic czy jest cyfra i czy nie jest mniejsza od zera i czy nie jest wieksza od indexu
@@ -263,7 +176,7 @@ public class Main {
                 System.out.println("Nothing to remove. Task list is empty!");
                 break;
             }
-            System.out.println(ConsoleColors.BLUE + "Please select number to remove:" + ConsoleColors.RESET);
+            System.out.println(BLUE + "Please select number to remove:" + RESET);
             System.out.print(" ->");
             //
             //przeczytalem o tej metodzie NumberUtils.isParsable() na końcu więc już nie mieszam bo działa...
@@ -275,7 +188,7 @@ public class Main {
                     //confirm
                     System.out.println("Are you sure that you want to remove this task?");
                     for (int i = 0; i < 3; i++) {
-                        System.out.print(ConsoleColors.YELLOW + tasks[rm][i] + ConsoleColors.RESET);
+                        System.out.print(YELLOW + tasks[rm][i] + RESET);
                     }
                     System.out.print("\n[y/n]->");
 
@@ -287,10 +200,10 @@ public class Main {
                         try {
                             tasks = ArrayUtils.remove(tasks, rm);
                             //tasks = ArrayUtils.clone(t1);
-                            System.out.println(ConsoleColors.RED + "Task removed." + ConsoleColors.RESET);
+                            System.out.println(RED + "Task removed." + RESET);
                             loop = false;
                         } catch (IndexOutOfBoundsException e) {
-                            System.out.println(ConsoleColors.RED + "Index Out Of Bound Exception\nPlease give number of existing task.\n" + ConsoleColors.RESET);
+                            System.out.println(RED + "Index Out Of Bound Exception\nPlease give number of existing task.\n" + RESET);
                            // loop = true;
                         }
                     } else {
@@ -300,18 +213,17 @@ public class Main {
 
                 } else {
                     if (rm > tasks.length) {
-                        System.out.println(ConsoleColors.RED + "Index Out Of Bound Exception\nPlease give number of existing task.\n" + ConsoleColors.RESET);
+                        System.out.println(RED + "Index Out Of Bound Exception\nPlease give number of existing task.\n" + RESET);
                         //loop = true;
                     } else {
-                        System.out.println(ConsoleColors.RED + "\nIncorrect argument passed. Please give number greater or equal 0" + ConsoleColors.RESET);
+                        System.out.println(RED + "\nIncorrect argument passed. Please give number greater or equal 0" + RESET);
                         //loop = true;
                     }
                 }
 
             } catch  (NumberFormatException e) {
-                System.out.println(ConsoleColors.RED + "\nIncorrect argument passed. Please give number greater or equal 0" + ConsoleColors.RESET);
-                //System.out.println(e);
-                //loop = true;
+                System.out.println(RED + "\nIncorrect argument passed. Please give number greater or equal 0" + RESET);
+
             }
 
         }
@@ -320,7 +232,7 @@ public class Main {
 
     public static void exit(String[][] tasks) {
         Scanner sc = new Scanner(System.in);
-        System.out.println(ConsoleColors.YELLOW + "Save tasks to file?" + ConsoleColors.RESET);
+        System.out.println(YELLOW + "Save tasks to file?" + RESET);
 
         String answer = "";
         while (!answer.equals("y") && !answer.equals("n") ) {
@@ -338,7 +250,7 @@ public class Main {
                     if ( i < tasks.length - 1 ) {line.append("\n");}
                 }
                 printWriter.print(line);
-                System.out.println(ConsoleColors.BLUE + "The data has been written to the file tasks.csv." + ConsoleColors.RESET);
+                System.out.println(BLUE + "The data has been written to the file tasks.csv." + RESET);
             } catch (FileNotFoundException ex) {
                 System.out.println("File Not Found Exception.");
             }
@@ -348,12 +260,12 @@ public class Main {
         }
 
         System.exit(0);
-        System.out.println(ConsoleColors.RED + "Bye, bye..." + ConsoleColors.RESET);
+        System.out.println(RED + "Bye, bye..." + RESET);
     }
 
     public static String menu() {
         System.out.print("----------------------------\n");
-        System.out.println("|" + ConsoleColors.BLUE + " Please select an option " + ConsoleColors.RESET + " | ");
+        System.out.println("|" + BLUE + " Please select an option " + RESET + " | ");
         System.out.print("----------------------------\n");
         String[] menu = {"add", "remove", "list", "modify (future)", "exit"};
         for (String s : menu) {
