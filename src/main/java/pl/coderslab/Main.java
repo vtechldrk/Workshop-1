@@ -1,6 +1,7 @@
 package pl.coderslab;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.validator.GenericValidator;
 //import org.apache.commons.lang3.math.NumberUtils;
 
@@ -22,7 +23,7 @@ public class Main {
                 case "add" -> tasks = add(tasks);
                 case "list" -> list(tasks);
                 case "remove" -> tasks = remove(tasks);
-                case "modify" -> tasks = modify(tasks);
+                //case "modify" -> tasks = modify(tasks);
                 case "exit" -> exit(tasks);
 
                 default -> {
@@ -32,16 +33,86 @@ public class Main {
         }
     }
 
-    public static String[][] modify(String[][] tasks){
-        // modyfikacja wybranego tasku
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Which task you want to edit?");
-        System.out.print("-->");
-
-
-
-        return tasks;
-    }
+//    public static String[][] modify(String[][] tasks){
+//        // modyfikacja wybranego tasku
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("Which task you want to edit?");
+//        System.out.print("-->");
+//        String s1 = sc.nextLine();
+//
+//        if (tasks.length == 0 ) {
+//            System.out.println("Task list is empty!");
+//            return tasks;
+//        }
+//
+////        while (!NumberUtils.isParsable(s1)) {
+////            System.out.println("Which task you want to edit?");
+////            System.out.print("-->");
+////            s1 = sc.nextLine();
+////        }
+//
+//        // trzeba sprawdzic czy jest cyfra i czy nie jest mniejsza od zera i czy nie jest wieksza od indexu
+//        boolean loop = true;
+//        while (loop) {
+//
+//            System.out.println(ConsoleColors.BLUE + "Which task you want to edit?" + ConsoleColors.RESET);
+//            System.out.print(" ->");
+//
+//            if ( NumberUtils.isParsable(s1) ) {
+//                int m1 = Integer.parseInt(s1);
+//                    if ((m1 < tasks.length) && ( m1 >= 0)) {
+//                    //confirm
+//                    for (int i = 0; i < 3; i++) {
+//                        System.out.print(ConsoleColors.YELLOW + tasks[rm][i] + ConsoleColors.RESET);
+//                    }
+//                    System.out.println("Are you sure that you want to remove this task?");
+//                    System.out.print("\n[y/n]->");
+//
+//                    sc = new Scanner(System.in);
+//                    if (sc.nextLine().equals("y")) {
+//                        // ten try jest tu nie potrzebny ale dodałem bo w zadaniu było aby był ;)
+//                        // natomiast wyjatek ten tutaj teoretyczni enigdy nie wystąpi
+//
+//                        try {
+//                            tasks = ArrayUtils.remove(tasks, rm);
+//                            //tasks = ArrayUtils.clone(t1);
+//                            System.out.println(ConsoleColors.RED + "Task removed." + ConsoleColors.RESET);
+//                            loop = false;
+//                        } catch (IndexOutOfBoundsException e) {
+//                            System.out.println(ConsoleColors.RED + "Index Out Of Bound Exception\nPlease give number of existing task.\n" + ConsoleColors.RESET);
+//                            // loop = true;
+//                        }
+//                    } else {
+//                        System.out.println("As you wish, I will not remove it.");
+//                        loop = false;
+//                    }
+//
+//                } else {
+//                    if (rm > tasks.length) {
+//                        System.out.println(ConsoleColors.RED + "Index Out Of Bound Exception\nPlease give number of existing task.\n" + ConsoleColors.RESET);
+//                        //loop = true;
+//                    } else {
+//                        System.out.println(ConsoleColors.RED + "\nIncorrect argument passed. Please give number greater or equal 0" + ConsoleColors.RESET);
+//                        //loop = true;
+//                    }
+//                }
+//
+//            } catch  (NumberFormatException e) {
+//                System.out.println(ConsoleColors.RED + "\nIncorrect argument passed. Please give number greater or equal 0" + ConsoleColors.RESET);
+//                //System.out.println(e);
+//                //loop = true;
+//            }
+//
+//
+//
+//
+//
+//            if ( s1 > tasks.length )
+//        System.out.println("wybrano " + s1 );
+//
+//
+//        return tasks;
+//    }
 
     public static void list(String[][] tasks) {
        // zrobic ładne wyswietlanie
@@ -148,6 +219,7 @@ public class Main {
             String data = sc.nextLine();
             while (!GenericValidator.isDate(data, "yyyy-MM-dd", true)) {
                 System.out.println(ConsoleColors.BLUE + "\nPlease provide date in proper format" + ConsoleColors.RESET);
+                System.out.print(" ->");
                 data = sc.nextLine();
             }
             sb.append(data).append(", ");
@@ -283,7 +355,7 @@ public class Main {
         System.out.print("----------------------------\n");
         System.out.println("|" + ConsoleColors.BLUE + " Please select an option " + ConsoleColors.RESET + " | ");
         System.out.print("----------------------------\n");
-        String[] menu = {"add", "remove", "list", "modify", "exit"};
+        String[] menu = {"add", "remove", "list", "modify (future)", "exit"};
         for (String s : menu) {
             System.out.printf("| %-24s |%n",s);
         }
